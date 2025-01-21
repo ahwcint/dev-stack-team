@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <RootApp>
-      <HeroUIProvider>{children}</HeroUIProvider>
+      <HeroUIProvider className="w-full h-full">{children}</HeroUIProvider>
     </RootApp>
   );
 }
@@ -31,9 +31,11 @@ function RootApp({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" className="w-full h-full dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
-        <main className="dark text-foreground bg-background">{children}</main>
+        <main className="dark text-foreground bg-background h-full w-full">
+          {children}
+        </main>
       </body>
     </html>
   );

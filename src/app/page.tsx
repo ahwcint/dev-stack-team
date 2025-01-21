@@ -1,17 +1,22 @@
 'use client';
-import { useSocket } from '@/hooks/useSocket/useSocket';
-import { Divider, Button, Card, CardBody, CardHeader } from '@heroui/react';
 
 export default function Home() {
-  useSocket(true);
   return (
-    <div>
-      <Button>TEST</Button>
-      <Card>
-        <CardHeader>Title</CardHeader>
+    <div className="flex bg-red-400">
+      {/* <Card className="max-w-xl m-auto">
+        <CardHeader>Login</CardHeader>
         <Divider />
-        <CardBody>This is content</CardBody>
-      </Card>
+        <CardBody>
+          <Form>
+            <Input label={'Username'} />
+            <Input label={'Password'} />
+            <div className="flex gap-2">
+              <Button type="button" variant="light">Register</Button>
+              <Button type="submit">Submit</Button>
+            </div>
+          </Form>
+        </CardBody>
+      </Card> */}
     </div>
   );
 }

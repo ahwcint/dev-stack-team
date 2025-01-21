@@ -17,11 +17,9 @@ const _io = new Server(_server, {
 // Express Routes
 _app.use(express.json()); // use express middleware
 expressRoutesConfig(_app);
-// Express Routes
 
 // Socket Io Actions
-socketConfig<Server>(_io);
-// Socket Io Actions
+socketConfig(_io);
 
 _server.listen(_port, () => {
   console.log('[SERVER] running on port: %s', _port);

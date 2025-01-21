@@ -9,11 +9,10 @@ export function useSocket(enabled = false) {
   useEffect(() => {
     socketIO.on('connect', () => {
       console.log('moew', socketIO.connected);
-      socketIO.emit('login', { username: '1234' });
     });
 
     return () => {
-      if (socketIO) socketIO.close();
+      if (socketIO) socketIO.disconnect();
     };
   }, [socketIO]);
 

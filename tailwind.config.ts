@@ -8,14 +8,14 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
-  theme: {
-    extend: {
-      colors: {
-        // background: 'var(--background)',
-        // foreground: 'var(--foreground)',
-      },
-    },
-  },
+  // theme: {
+  //   extend: {
+  //     colors: {
+  //       // background: 'var(--background)',
+  //       // foreground: 'var(--foreground)',
+  //     },
+  //   },
+  // },
   darkMode: 'class',
   plugins: [
     heroui({
@@ -26,12 +26,20 @@ export default {
       layout: {}, // common layout tokens (applied to all themes)
       themes: {
         light: {
-          layout: {}, // light theme layout tokens
-          colors: {}, // light theme colors
+          layout: {},
+          colors: {
+            background: '#ffffff',
+            foreground: '#14213d',
+            primary: {
+              DEFAULT: '#fca311',
+              foreground: '#14213d',
+            },
+            focus: '#fca311',
+          },
         },
         dark: {
-          layout: {}, // dark theme layout tokens
-          colors: {}, // dark theme colors
+          layout: {},
+          colors: {},
         },
         // ... custom themes
       },

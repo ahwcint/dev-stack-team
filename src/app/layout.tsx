@@ -29,11 +29,11 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 
 function RootApp({ children }: Readonly<PropsWithChildren>) {
   return (
-    <html lang="en" className="w-full h-full dark">
+    <html lang="en" className="w-full h-full light">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
-        <main className="dark text-foreground bg-background h-full w-full">
+        <main className="light text-foreground bg-background h-full w-full">
           {children}
         </main>
       </body>

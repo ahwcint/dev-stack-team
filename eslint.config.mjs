@@ -18,6 +18,11 @@ const eslintConfig = [
   {
     ignores: ['server/dist/*'],
   },
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['warn'],
+    },
+  },
 ];
 
 export default eslintConfig;

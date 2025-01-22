@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "next dev & nodemon server/server.ts",
-    "dev:next": "next dev",
-    "build": "next build",
+    "dev:api": "nodemon server/server.ts",
+    "dev:web": "next dev",
+    "build": "cd ./server && npx prisma generate && next build",
+    "build:web": "next build",
+    "build:api": "cd ./server && npx prisma generate",
     "start": "next start",
     "lint": "eslint . --fix",
     "format": "prettier --write .",

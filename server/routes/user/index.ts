@@ -26,29 +26,29 @@ export function UserRoute(_app: TypeExpress) {
     },
   );
 
-  // _app.put(
-  //   `/${ROUTE_NAME}/:userId`,
-  //   async (
-  //     { params, body }: { params: Pick<User, 'userId'>; body: User },
-  //     res,
-  //   ) => {
-  //     const response = await handlerApi<User>(
-  //       'update-user',
-  //       async () =>
-  //         await prisma.user.update({
-  //           data: {
-  //             username: body.username,
-  //             password: body.password,
-  //           },
-  //           where: {
-  //             userId: params.userId,
-  //           },
-  //         }),
-  //     );
+  _app.put(
+    `/${ROUTE_NAME}/:userId`,
+    async (
+      { params, body }: { params: Pick<User, 'userId'>; body: User },
+      res,
+    ) => {
+      const response = await handlerApi<User>(
+        'update-user',
+        async () =>
+          await prisma.user.update({
+            data: {
+              username: body.username,
+              password: body.password,
+            },
+            where: {
+              userId: params.userId,
+            },
+          }),
+      );
 
-  //     res.status(response.status).json(response);
-  //   },
-  // );
+      res.status(response.status).json(response);
+    },
+  );
 
   _app.get(`/${ROUTE_NAME}`, async (req, res) => {
     const response = await handlerApi<User[]>(

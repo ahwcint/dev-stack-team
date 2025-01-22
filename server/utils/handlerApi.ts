@@ -3,14 +3,15 @@ import logger from './pino';
 export async function handlerApi<V>(
   actionName: string,
   apiFn: () => Promise<V | null>,
-) {
+): Promise<handleResponse<V>> {
   try {
     const res = await apiFn();
     logger.info('[✅][API_SUCCESS]-[%s] : %o', actionName, res);
     return {
       data: res,
       message: 'success',
-      status: 200,
+      status: 201,
+      success: true,
     };
   } catch (e) {
     logger.error(
@@ -22,12 +23,12 @@ export async function handlerApi<V>(
   }
 }
 
-function handleError(errorCode = 'LOGIC_ERROR') {
+function handleError<V>(errorCode = 'LOGIC_ERROR'): handleResponse<V> {
   const response = {
     data: null,
-    code: errorCode,
+    success: false,
     message: 'unknown api error',
-    status: 409,
+    status: 202,
   };
   switch (errorCode) {
     case 'P2002':
@@ -39,3 +40,10 @@ function handleError(errorCode = 'LOGIC_ERROR') {
   }
   return response;
 }
+
+type handleResponse<V> = {
+  data: Awaited<V> | null;
+  message: string;
+  status: number;
+  success: boolean;
+};

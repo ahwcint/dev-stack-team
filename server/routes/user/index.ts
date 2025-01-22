@@ -2,10 +2,13 @@ import { User } from '@prisma/client';
 import { TypeExpress } from '../../server';
 import { handlerApi } from '../../utils/handlerApi';
 import prisma from '../../utils/prisma.singleton';
+import logger from '../../utils/pino';
+import { createUser } from './service';
+import { createUserRequestApi } from './dto/createUser.dto';
 
 const ROUTE_NAME = 'user';
 
-export function User(_app: TypeExpress) {
+export function UserRoute(_app: TypeExpress) {
   _app.get(
     `/${ROUTE_NAME}/:userId`,
     async ({ params }: { params: Pick<User, 'userId'> }, res) => {
@@ -56,18 +59,13 @@ export function User(_app: TypeExpress) {
     res.status(response.status).json(response);
   });
 
-  _app.post(`/${ROUTE_NAME}`, async ({ body }: { body: User }, res) => {
-    const response = await handlerApi(
-      'create-user',
-      async () =>
-        await prisma.user.create({
-          data: {
-            username: body.username,
-            password: body.password,
-          },
-        }),
-    );
+  _app.post(
+    `/${ROUTE_NAME}`,
+    async ({ body }: { body: createUserRequestApi }, res) => {
+      logger.info('🚁 fire create user api');
+      const response = await createUser(body);
 
-    res.status(response.status).json(response);
-  });
+      res.status(response.status).json(response);
+    },
+  );
 }

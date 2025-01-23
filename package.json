@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev & nodemon server/server.ts",
-    "dev:api": "nodemon server/server.ts",
+    "dev": "next dev & nodemon server/api/index.ts",
+    "dev:api": "nodemon server/api/index.ts",
     "dev:web": "next dev",
     "build": "cd ./server && npx prisma generate && cd .. && next build",
     "build:web": "next build",

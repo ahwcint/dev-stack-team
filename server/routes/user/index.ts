@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { TypeExpress } from '../../server';
+import { TypeExpress } from '../../api';
 import { handlerApi } from '../../utils/handlerApi';
 import prisma from '../../utils/prisma.singleton';
 import logger from '../../utils/pino';

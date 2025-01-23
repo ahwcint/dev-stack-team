@@ -5,13 +5,14 @@ import prisma from '../../utils/prisma.singleton';
 import logger from '../../utils/pino';
 import { createUser } from './service';
 import { createUserRequestApi } from './dto/createUser.dto';
+import { Response } from 'express';
 
 const ROUTE_NAME = 'user';
 
 export function UserRoute(_app: TypeExpress) {
   _app.get(
     `/${ROUTE_NAME}/:userId`,
-    async ({ params }: { params: Pick<User, 'userId'> }, res) => {
+    async ({ params }: GetRequest, res: Response) => {
       const response = await handlerApi<User>(
         'get-user-by-id',
         async () =>
@@ -28,10 +29,7 @@ export function UserRoute(_app: TypeExpress) {
 
   _app.put(
     `/${ROUTE_NAME}/:userId`,
-    async (
-      { params, body }: { params: Pick<User, 'userId'>; body: User },
-      res,
-    ) => {
+    async ({ params, body }: PutRequest, res: Response) => {
       const response = await handlerApi<User>(
         'update-user',
         async () =>
@@ -50,7 +48,7 @@ export function UserRoute(_app: TypeExpress) {
     },
   );
 
-  _app.get(`/${ROUTE_NAME}`, async (req, res) => {
+  _app.get(`/${ROUTE_NAME}`, async (_, res: Response) => {
     const response = await handlerApi<User[]>(
       'list-all-user',
       async () => await prisma.user.findMany(),
@@ -59,13 +57,14 @@ export function UserRoute(_app: TypeExpress) {
     res.status(response.status).json(response);
   });
 
-  _app.post(
-    `/${ROUTE_NAME}`,
-    async ({ body }: { body: createUserRequestApi }, res) => {
-      logger.info('🚁 fire create user api');
-      const response = await createUser(body);
+  _app.post(`/${ROUTE_NAME}`, async ({ body }: PostRequest, res: Response) => {
+    logger.info('🚁 fire create user api');
+    const response = await createUser(body);
 
-      res.status(response.status).json(response);
-    },
-  );
+    res.status(response.status).json(response);
+  });
 }
+
+type GetRequest = { params: Pick<User, 'userId'> };
+type PutRequest = { params: Pick<User, 'userId'>; body: User };
+type PostRequest = { body: createUserRequestApi };

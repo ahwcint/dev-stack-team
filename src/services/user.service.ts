@@ -13,7 +13,7 @@ export async function createUserApiService(
   payload: createUserRequestApi,
 ): Promise<createUserResponseApi> {
   const res = await callAPI<User>(
-    axios.post(`${process.env.SOCKET_LOCAL}/user`, payload),
+    axios.post(`${process.env.API_URL_PATH}/user`, payload),
   );
 
   return res;

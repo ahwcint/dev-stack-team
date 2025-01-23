@@ -16,7 +16,7 @@ const eslintConfig = [
     'plugin:prettier/recommended',
   ),
   {
-    ignores: ['server/*', 'node_modules', '.next'],
+    ignores: ['server/node_modules', 'node_modules', '.next', 'server/dist'],
   },
   {
     rules: {

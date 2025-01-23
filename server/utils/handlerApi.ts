@@ -16,8 +16,8 @@ export async function handlerApi<V>(
       error_message: undefined,
     };
   } catch (e) {
+    const error = JSON.parse(JSON.stringify(e));
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      const error = JSON.parse(JSON.stringify(e));
       logger.error(
         `[❌][API_ERROR]-[%s] : %s`,
         actionName,
@@ -25,7 +25,7 @@ export async function handlerApi<V>(
       );
       return handleError((e as { code: string }).code, error);
     } else {
-      return handleError((e as { code: string }).code, 'Unexpected Api Error');
+      return handleError((e as { code: string }).code, error);
     }
   }
 }

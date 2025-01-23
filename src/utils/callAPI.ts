@@ -8,12 +8,12 @@ export async function callAPI<T>(
     const { data } = await apiCallFn;
     return data;
   } catch (e) {
-    console.error('Unexpected Error', e);
     return {
-      data: JSON.parse(JSON.stringify(e)) as T,
-      message: 'Unexpected Error',
+      data: null,
+      message: 'Unexpected Client Error',
       status: 500,
       success: false,
+      error_message: JSON.parse(JSON.stringify(e)),
     };
   }
 }

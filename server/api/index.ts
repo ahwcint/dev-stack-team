@@ -1,8 +1,8 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import { socketConfig } from './socket-io';
-import { expressRoutesConfig } from './routes';
+import { socketConfig } from '../socket-io';
+import { expressRoutesConfig } from '../routes';
 
 const _port = 3003;
 const _app = express();

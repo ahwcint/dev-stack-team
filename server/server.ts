@@ -9,8 +9,8 @@ const _app = express();
 const _server = http.createServer(_app);
 const _io = new Server(_server, {
   cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
+    origin: process.env.ORIGIN_PATH,
+    methods: ['GET', 'POST', 'PUT', 'PATCH'],
   },
 });
 

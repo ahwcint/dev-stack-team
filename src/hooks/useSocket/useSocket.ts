@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 
 export function useSocket(enabled = false) {
   const { current: socketIO } = useRef<ReturnType<typeof io>>(
-    io(process.env.SOCKET_LOCAL),
+    io(process.env.API_URL_PATH),
   );
   useEffect(() => {
     socketIO.on('connect', () => {

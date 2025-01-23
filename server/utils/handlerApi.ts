@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import logger from './pino';
 
 export async function handlerApi<V>(
@@ -12,23 +13,33 @@ export async function handlerApi<V>(
       message: 'success',
       status: 201,
       success: true,
+      error_message: undefined,
     };
   } catch (e) {
-    logger.error(
-      `[❌][API_ERROR]-[%s] : %s`,
-      actionName,
-      handleError((e as { code: string }).code).message,
-    );
-    return handleError((e as { code: string }).code);
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      const error = JSON.parse(JSON.stringify(e));
+      logger.error(
+        `[❌][API_ERROR]-[%s] : %s`,
+        actionName,
+        handleError((e as { code: string }).code, error).message,
+      );
+      return handleError((e as { code: string }).code, error);
+    } else {
+      return handleError((e as { code: string }).code, 'Unexpected Api Error');
+    }
   }
 }
 
-function handleError<V>(errorCode = 'LOGIC_ERROR'): handleResponse<V> {
+function handleError<V>(
+  errorCode = 'LOGIC_ERROR',
+  error_message: unknown,
+): handleResponse<V> {
   const response = {
     data: null,
     success: false,
     message: 'unknown api error',
     status: 202,
+    error_message: error_message,
   };
   switch (errorCode) {
     case 'P2002':
@@ -44,6 +55,7 @@ function handleError<V>(errorCode = 'LOGIC_ERROR'): handleResponse<V> {
 type handleResponse<V> = {
   data: Awaited<V> | null;
   message: string;
+  error_message: unknown;
   status: number;
   success: boolean;
 };

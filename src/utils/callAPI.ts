@@ -10,7 +10,7 @@ export async function callAPI<T>(
   } catch (e) {
     console.error('Unexpected Error', e);
     return {
-      data: null as T,
+      data: JSON.parse(JSON.stringify(e)) as T,
       message: 'Unexpected Error',
       status: 500,
       success: false,

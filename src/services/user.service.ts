@@ -4,11 +4,11 @@ import { User } from '@prisma/client';
 import type {
   createUserRequestApi,
   createUserResponseApi,
-} from '@/user/dto/createUser.dto';
+} from '@/routes/user/dto/createUser.dto';
 import type {
   signInUserRequestApi,
   signInUserResponseApi,
-} from '@/user/dto/signInUser.dto';
+} from '@/routes/user/dto/signInUser.dto';
 import { callAPI } from '@/utils/callAPI';
 import axios from 'axios';
 

@@ -1,4 +1,4 @@
-import { BaseResponseApi } from '@/main/dto/base.dto';
+import type { BaseResponseApi } from '@/routes/main/dto/base.dto';
 import { AxiosError, AxiosResponse } from 'axios';
 
 export async function callAPI<T>(
@@ -6,7 +6,6 @@ export async function callAPI<T>(
 ): Promise<BaseResponseApi<T>> {
   try {
     const { data, ...rest } = await apiCallFn();
-    console.log('rest :>> ', rest.headers['set-cookie']);
     return data;
   } catch (e) {
     if (e instanceof AxiosError) {

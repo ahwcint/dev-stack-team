@@ -11,7 +11,7 @@ export async function handlerApi<V>(
     return {
       data: res,
       message: 'success',
-      status: 201,
+      status: 200,
       success: true,
       error_message: undefined,
     };
@@ -38,7 +38,7 @@ function handleError<V>(
     data: null,
     success: false,
     message: 'unknown api error',
-    status: 202,
+    status: 201,
     error_message: error_message,
   };
   switch (errorCode) {

@@ -19,8 +19,19 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  userId   String @unique @default(uuid())
-  username String @unique
+  id       Int       @default(autoincrement())
+  userId   String    @id @unique @default(uuid())
+  username String    @unique
   password String
+  sessions Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid()) // Unique session identifier
+  userId    String // Foreign key to the User model
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  token     String   @unique // Session token (e.g., for authentication)
+  createdAt DateTime @default(now()) // When the session was created
+  updatedAt DateTime @updatedAt // Automatically updated on changes
+  expiresAt DateTime
 }

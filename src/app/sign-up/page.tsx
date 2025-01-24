@@ -35,10 +35,11 @@ export default function Login() {
           onSubmit={async (e) => {
             e.preventDefault();
             const data = Object.fromEntries(new FormData(e.currentTarget));
-            const result = userSchema.parse(data);
-            createUserApiService(result).then((res) =>
-              console.log('res :>> ', res),
-            );
+            const result = userSchema.safeParse(data);
+            if (result.success)
+              createUserApiService(result.data).then((res) =>
+                console.log('res :>> ', res),
+              );
           }}
           validationBehavior="native"
         >

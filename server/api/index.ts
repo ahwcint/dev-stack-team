@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import cors from 'cors';
 import { Server } from 'socket.io';
 import { socketConfig } from '../socket-io';
 import { expressRoutesConfig } from '../routes';
@@ -11,10 +12,12 @@ const _io = new Server(_server, {
   cors: {
     origin: process.env.ORIGIN_PATH,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
+    credentials: true,
   },
 });
 
 // Express Routes
+_app.use(cors({ origin: process.env.ORIGIN_PATH, credentials: true }));
 _app.use(express.json()); // use express middleware
 expressRoutesConfig(_app);
 

@@ -22,15 +22,14 @@ export function ContainerMaxCenter({
         )}
         animate={
           innerOpen
-            ? { rotate: 0, opacity: 1, scale: 1 }
+            ? { translateY: '0%', opacity: 1, scale: 1 }
             : {
-                rotate: 0,
                 opacity: 0,
                 scale: 0.8,
                 translateY: '-30%',
               }
         }
-        style={{ rotate: 10, opacity: 0, scale: 0.8 }}
+        style={{ translateY: '-30%', opacity: 0, scale: 0.8 }}
       >
         {children}
       </motion.section>

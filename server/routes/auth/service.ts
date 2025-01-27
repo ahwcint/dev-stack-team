@@ -33,7 +33,7 @@ export async function createSession(
       data: null,
       message: 'Failed to create session',
       success: false,
-      status: 500,
+      status: 203,
     };
   }
 }

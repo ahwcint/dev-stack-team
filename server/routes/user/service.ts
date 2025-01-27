@@ -74,6 +74,7 @@ export async function verifyUserSignIn(
       },
     ];
 
+
   // 3.create session and return currentSession within
   const sessionResponse = await createSession(response.data.userId);
   if (!sessionResponse.data)

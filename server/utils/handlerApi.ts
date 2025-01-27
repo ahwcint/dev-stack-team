@@ -13,7 +13,6 @@ export async function handlerApi<V>(
       message: 'success',
       status: 200,
       success: true,
-      error_message: undefined,
     };
   } catch (e) {
     const error = JSON.parse(JSON.stringify(e));
@@ -21,25 +20,22 @@ export async function handlerApi<V>(
       logger.error(
         `[❌][API_ERROR]-[%s] : %s`,
         actionName,
-        handleError((e as { code: string }).code, error).message,
+        handleError((e as { code: string }).code).message,
+        error,
       );
-      return handleError((e as { code: string }).code, error);
+      return handleError((e as { code: string }).code);
     } else {
-      return handleError((e as { code: string }).code, error);
+      return handleError((e as { code: string }).code);
     }
   }
 }
 
-function handleError<V>(
-  errorCode = 'LOGIC_ERROR',
-  error_message: unknown,
-): handleResponse<V> {
+function handleError<V>(errorCode = 'LOGIC_ERROR'): handleResponse<V> {
   const response = {
     data: null,
     success: false,
     message: 'unknown api error',
     status: 201,
-    error_message: error_message,
   };
   switch (errorCode) {
     case 'P2002':
@@ -55,7 +51,6 @@ function handleError<V>(
 type handleResponse<V> = {
   data: Awaited<V> | null;
   message: string;
-  error_message: unknown;
   status: number;
   success: boolean;
 };

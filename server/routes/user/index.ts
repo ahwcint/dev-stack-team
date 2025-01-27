@@ -1,11 +1,10 @@
+import { Response } from 'express';
 import { User } from '@prisma/client';
+import { createUserRequestApi } from './dto/createUser.dto';
+import { createUser, verifyUserSignIn } from './service';
 import { TypeExpress } from '../../api';
 import { handlerApi } from '../../utils/handlerApi';
 import prisma from '../../utils/prisma.singleton';
-import logger from '../../utils/pino';
-import { createUser, verifyUserSignIn } from './service';
-import { createUserRequestApi } from './dto/createUser.dto';
-import { Response } from 'express';
 
 const ROUTE_NAME = '/user';
 
@@ -58,7 +57,6 @@ export function UserRoute(_app: TypeExpress) {
   });
 
   _app.post(`${ROUTE_NAME}`, async ({ body }: PostRequest, res: Response) => {
-    logger.info('🚁 fire create user api');
     const response = await createUser(body);
 
     res.status(response.status).json(response);

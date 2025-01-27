@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc --build & npx prisma generate",
     "start": "node ./dist/index.js",
-    "dev": "nodemon ./api/index.ts"
+    "dev": "nodemon ./api/index.ts",
+    "prisma:push": "yarn prisma db push",
+    "prisma:pull": "yarn prisma db pull && yarn prisma generate"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

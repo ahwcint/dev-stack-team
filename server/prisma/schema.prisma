@@ -27,11 +27,11 @@ model User {
 }
 
 model Session {
-  id        String   @id @default(cuid()) // Unique session identifier
-  userId    String // Foreign key to the User model
+  id        String   @id @default(cuid())
+  userId    String
   user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  token     String   @unique // Session token (e.g., for authentication)
-  createdAt DateTime @default(now()) // When the session was created
-  updatedAt DateTime @updatedAt // Automatically updated on changes
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   expiresAt DateTime
 }

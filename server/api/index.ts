@@ -17,7 +17,13 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-_app.use(cors({ origin: process.env.ORIGIN_PATH, credentials: true }));
+_app.use(
+  cors({
+    origin: process.env.ORIGIN_PATH,
+    methods: ['GET', 'POST', 'PUT', 'PATCH'],
+    credentials: true,
+  }),
+);
 _app.use(express.json()); // use express middleware
 expressRoutesConfig(_app);
 

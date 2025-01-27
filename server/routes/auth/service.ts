@@ -8,7 +8,6 @@ import {
 } from './dto/verifySession.dto';
 import logger from '../../utils/pino';
 
-
 export async function createSession(
   userId: string,
 ): Promise<BaseResponseApi<Session>> {
@@ -42,7 +41,6 @@ export async function createSession(
 export async function verifySession({
   token,
 }: verifySessionRequestApi): Promise<verifySessionResponseApi> {
-
   try {
     await decrypt(token);
 

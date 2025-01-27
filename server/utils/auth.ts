@@ -1,11 +1,9 @@
-'server-only';
+'use server';
 import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 
-const algoSession = process.env.ALGO_SESSION;
-const encodedKey = new TextEncoder().encode(process.env.SECRET_KEY);
-
 export async function encrypt(payload: { userId: string; expiresAt: Date }) {
+  const { algoSession, encodedKey } = getEnv();
   if (algoSession === undefined) throw new Error('algoSession missing');
   return new SignJWT(payload)
     .setProtectedHeader({ alg: algoSession })
@@ -15,6 +13,7 @@ export async function encrypt(payload: { userId: string; expiresAt: Date }) {
 }
 
 export async function decrypt(session: string | undefined = '') {
+  const { algoSession, encodedKey } = getEnv();
   if (algoSession === undefined) throw new Error('algoSession missing');
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
@@ -36,4 +35,13 @@ export async function verifyPassword(
   hashedPassword: string,
 ) {
   return await bcrypt.compare(rawPassword, hashedPassword);
+}
+
+function getEnv() {
+  const algoSession = process.env.ALGO_SESSION;
+  const encodedKey = new TextEncoder().encode(process.env.SECRET_KEY);
+  return {
+    algoSession,
+    encodedKey,
+  };
 }

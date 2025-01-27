@@ -1,8 +1,12 @@
-// import { cookies } from 'next/headers';
 import { decrypt, encrypt } from '../../utils/auth';
 import prisma from '../../utils/prisma.singleton';
 import type { Session, User } from '@prisma/client';
 import type { BaseResponseApi } from '../main/dto/base.dto';
+import {
+  verifySessionRequestApi,
+  verifySessionResponseApi,
+} from './dto/verifySession.dto';
+import logger from '../../utils/pino';
 
 export async function createSession(
   userId: string,
@@ -17,37 +21,27 @@ export async function createSession(
         token: token_session,
       },
     });
-    // const cookieStore = await cookies();
-
-    // cookieStore.set('session', session, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   expires: undefined,
-    //   sameSite: 'lax',
-    //   path: '/',
-    // });
 
     return {
       data: response,
       message: 'success',
       success: true,
       status: 200,
-      error_message: undefined,
     };
   } catch (e) {
+    logger.error('Failed to create session', JSON.parse(JSON.stringify(e)));
     return {
       data: null,
       message: 'Failed to create session',
-      error_message: JSON.parse(JSON.stringify(e)),
       success: false,
       status: 500,
     };
   }
 }
 
-export async function verifySession(
-  token: string,
-): Promise<BaseResponseApi<User>> {
+export async function verifySession({
+  token,
+}: verifySessionRequestApi): Promise<verifySessionResponseApi> {
   try {
     await decrypt(token);
 
@@ -61,8 +55,7 @@ export async function verifySession(
     }
 
     return {
-      data: session.user,
-      error_message: undefined,
+      data: session,
       message: 'success',
       status: 200,
       success: true,
@@ -70,7 +63,6 @@ export async function verifySession(
   } catch (e) {
     return {
       data: null,
-      error_message: JSON.parse(JSON.stringify(e)),
       message: 'Session expired or invalid',
       status: 200,
       success: true,

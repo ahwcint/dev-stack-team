@@ -18,7 +18,7 @@ export function AuthRoute(_app: TypeExpress) {
   _app.get(
     `${ROUTE_NAME}/verify-session/:session`,
     async ({ params }, res: Response) => {
-      const response = await verifySession(params.session);
+      const response = await verifySession({ token: params.session });
       res.status(response.status).json(response);
     },
   );

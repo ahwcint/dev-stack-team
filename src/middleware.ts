@@ -1,19 +1,37 @@
+'user server';
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { verifySessionApiService } from './services/auth.service';
 
-export function middleware(request: NextRequest) {
+const protectedPath = ['/sign-in', '/sign-up'];
+
+export async function middleware(request: NextRequest) {
   const token = request.cookies.get('sessionToken');
-  console.log('object :>> ', request.cookies.getAll());
-  if (!token) return NextResponse.redirect(new URL('/sign-in', request.url));
+  const pathName = request.nextUrl.pathname;
+  if (!token && !protectedPath.includes(pathName)) {
+    return NextResponse.redirect(new URL('/sign-in', request.url));
+  }
 
-  const response = NextResponse.next();
-  response.headers.set('Authorization', `Bearer ${token}`);
+  if (token?.value) {
+    if (protectedPath.includes(pathName))
+      return NextResponse.redirect(new URL('/', request.url));
 
-  return response;
+    const sessionResponse = await verifySessionApiService(token.value);
+
+    if (sessionResponse.success) {
+      const response = NextResponse.next();
+      if (sessionResponse.data?.user) {
+        response.cookies.set('user', JSON.stringify(sessionResponse.data.user));
+      } else {
+        console.error('Api user error');
+      }
+      response.headers.set('Authorization', `Bearer ${token.value}`);
+      return response;
+    }
+  }
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|sign-in|sign-up).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

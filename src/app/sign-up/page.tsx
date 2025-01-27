@@ -1,6 +1,7 @@
 'use client';
 import { ContainerMaxCenter } from '@/components/ContainerMaxCenter';
 import { fieldValidate } from '@/dialog/dialogFieldValidate';
+import { useApiAction } from '@/hooks/useApiAction';
 import { createUserApiService } from '@/services/user.service';
 import { Input, Form, Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
@@ -10,12 +11,28 @@ import { z } from 'zod';
 const userSchema = z.object({
   username: z.string().min(4),
   password: z.string().min(4),
+  confirm_password: z.string().min(4),
 });
 
 export default function Login() {
   const router = useRouter();
   const [open, setOpen] = useState(true);
   const [password, setPassword] = useState('');
+
+  const {
+    data: formData,
+    action: formAction,
+    isPending,
+  } = useApiAction(
+    async (result) => {
+      return await createUserApiService(result.data);
+    },
+    {
+      validateSchema: userSchema,
+      disabledAutoEnqueueToast: false,
+    },
+  );
+
   const handleChangeRoute = () => {
     setOpen(false);
     setTimeout(() => router.push('./sign-in'), 300);
@@ -24,6 +41,7 @@ export default function Login() {
   useEffect(() => {
     router.prefetch('./sign-in');
   }, [router]);
+
   return (
     <ContainerMaxCenter innerOpen={open}>
       <span className="text-center inline-block font-bold text-4xl w-full">
@@ -31,16 +49,8 @@ export default function Login() {
       </span>
       <div>
         <Form
+          action={formAction}
           autoComplete="off"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const data = Object.fromEntries(new FormData(e.currentTarget));
-            const result = userSchema.safeParse(data);
-            if (result.success)
-              createUserApiService(result.data).then((res) =>
-                console.log('res :>> ', res),
-              );
-          }}
           validationBehavior="native"
         >
           <Input
@@ -49,6 +59,7 @@ export default function Login() {
             isRequired
             name="username"
             validate={(v) => fieldValidate.strAtRange('username', v, '>=', 4)}
+            defaultValue={formData?.username}
           />
           <Input
             label={'Password'}
@@ -57,6 +68,7 @@ export default function Login() {
             name="password"
             validate={(v) => fieldValidate.strAtRange('password', v, '>=', 4)}
             onValueChange={setPassword}
+            defaultValue={formData?.password}
           />
           <Input
             label={'Confirm Password'}
@@ -70,7 +82,7 @@ export default function Login() {
             }
           />
           <div className="flex gap-2 w-full flex-col">
-            <Button type="submit" fullWidth>
+            <Button type="submit" fullWidth isLoading={isPending}>
               Submit
             </Button>
             <Button type="button" variant="light" onPress={handleChangeRoute}>

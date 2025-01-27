@@ -10,12 +10,12 @@ export async function callAPI<T>(
   } catch (e) {
     if (e instanceof AxiosError) {
       const error: AxiosError = JSON.parse(JSON.stringify(e));
+      console.log('error :>> ', error);
       return {
         data: null,
         message: 'Axios Error',
         status: error.status || 500,
         success: false,
-        error_message: error,
       };
     }
 
@@ -24,7 +24,6 @@ export async function callAPI<T>(
       message: 'Unexpected Axios Error',
       status: 500,
       success: false,
-      error_message: JSON.parse(JSON.stringify(e)),
     };
   }
 }

@@ -12,6 +12,7 @@ import type {
 } from './dto/signInUser.dto';
 import { createSession } from '../auth/service';
 import type { BaseResponseApi } from '../main/dto/base.dto';
+import { omitObjectField } from '../../utils/utils';
 
 export async function createUser(
   payload: createUserRequestApi,
@@ -52,8 +53,7 @@ export async function verifyUserSignIn(
     return [
       {
         data: null,
-        error_message: 'Username or password is incorrect.',
-        message: 'failure',
+        message: 'Username or password is incorrect',
         status: 203,
         success: false,
       },
@@ -68,8 +68,7 @@ export async function verifyUserSignIn(
     return [
       {
         data: null,
-        error_message: 'Username or password is incorrect.',
-        message: 'failure',
+        message: 'Username or password is incorrect',
         status: 203,
         success: false,
       },
@@ -80,5 +79,11 @@ export async function verifyUserSignIn(
   if (!sessionResponse.data)
     return [{ ...sessionResponse, data: null, status: 203 }];
 
-  return [response, sessionResponse.data];
+  // 4.filter safe data
+  const safeResponse = {
+    ...response,
+    data: omitObjectField(response.data, 'password'),
+  };
+
+  return [safeResponse, sessionResponse.data];
 }

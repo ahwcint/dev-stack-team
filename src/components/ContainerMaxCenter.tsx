@@ -1,6 +1,6 @@
 'use client';
 
-import { HTMLAttributes, PropsWithChildren } from 'react';
+import { HTMLAttributes, PropsWithChildren, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { cn } from '@heroui/theme';
 
@@ -26,7 +26,7 @@ export function ContainerMaxCenter({
             : {
                 opacity: 0,
                 scale: 0.8,
-                translateY: '-30%',
+                translateY: '30%',
               }
         }
         style={{ translateY: '-30%', opacity: 0, scale: 0.8 }}

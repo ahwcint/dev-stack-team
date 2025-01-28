@@ -15,10 +15,10 @@ export function ContainerMaxCenter({
   innerOpen?: boolean;
 }) {
   return (
-    <div className={cn(`h-full w-full flex p-3 ${outerClassName}`)}>
+    <div className={cn(`h-full w-full flex p-3 ${outerClassName || ''}`)}>
       <motion.section
         className={cn(
-          `max-w-lg w-full m-auto flex gap-4 flex-col ${innerClassName}`,
+          `max-w-lg w-full m-auto flex gap-4 flex-col ${innerClassName || ''}`,
         )}
         animate={
           innerOpen

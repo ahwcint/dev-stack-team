@@ -59,6 +59,22 @@ export function UserRoute(_app: TypeExpress) {
   _app.post(`${ROUTE_NAME}`, async ({ body }: PostRequest, res: Response) => {
     const response = await createUser(body);
 
+    if (response.data && response.success) {
+      const [_, currentSession] = await verifyUserSignIn({
+        username: response.data.username,
+        password: response.data.password,
+      });
+
+      if (response.status < 400 && response.data) {
+        res.cookie('sessionToken', currentSession?.token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          expires: currentSession?.expiresAt,
+          sameSite: 'lax',
+          path: '/',
+        });
+      }
+    }
     res.status(response.status).json(response);
   });
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { HeroUIProvider } from '@heroui/react';
 import './globals.css';
 import { PropsWithChildren } from 'react';
-import { RootApp } from './RootApp';
+import { RootApp } from '../components/root-app/RootApp';
 
 export const metadata: Metadata = {
   title: 'DevStack',

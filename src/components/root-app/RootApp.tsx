@@ -2,6 +2,7 @@
 import Toast from '@/components/toast/useToast';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { PropsWithChildren } from 'react';
+import { NavigationBar } from '../navigation-bar/NavigationBar';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,9 +21,10 @@ export function RootApp({ children }: Readonly<PropsWithChildren>) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
         <main className="light text-foreground bg-background h-full w-full">
+          <NavigationBar />
           {children}
+          <Toast.Toaster />
         </main>
-        <Toast.Toaster />
       </body>
     </html>
   );

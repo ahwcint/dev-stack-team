@@ -30,6 +30,9 @@ export default function Login() {
     {
       validateSchema: userSchema,
       disabledAutoEnqueueToast: false,
+      onSuccess: () => {
+        router.push('./');
+      },
     },
   );
 

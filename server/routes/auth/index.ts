@@ -23,9 +23,9 @@ export function AuthRoute(_app: TypeExpress) {
       if (response.status < 400 && response.data) {
         res.cookie('sessionToken', response.data?.token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
+          secure: true,
           expires: response.data?.expiresAt,
-          sameSite: 'lax',
+          sameSite: 'none',
           path: '/',
         });
       }
@@ -43,14 +43,14 @@ export function AuthRoute(_app: TypeExpress) {
   _app.get(`${ROUTE_NAME}/sign-out`, async (req: Request, res: Response) => {
     res.clearCookie('sessionToken', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       path: '/',
     });
     res.clearCookie('user', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       path: '/',
     });
     res.status(200).json({

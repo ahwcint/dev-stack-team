@@ -8,8 +8,8 @@ export async function callAPI<T>(
     const { data, ...rest } = await apiCallFn();
     return data;
   } catch (e) {
+    const error: AxiosError = JSON.parse(JSON.stringify(e));
     if (e instanceof AxiosError) {
-      const error: AxiosError = JSON.parse(JSON.stringify(e));
       console.log('error :>> ', error);
       return {
         data: null,
@@ -19,6 +19,7 @@ export async function callAPI<T>(
       };
     }
 
+    console.log('error :>> ', error);
     return {
       data: null,
       message: 'Unexpected Axios Error',

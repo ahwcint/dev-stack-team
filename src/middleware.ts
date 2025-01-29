@@ -9,6 +9,7 @@ const protectedPath = ['/sign-in', '/sign-up'];
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('sessionToken');
   const pathName = request.nextUrl.pathname;
+
   if (!token && !protectedPath.includes(pathName)) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
@@ -26,7 +27,7 @@ export async function middleware(request: NextRequest) {
       } else {
         console.error('Api user error');
       }
-      response.headers.set('Authorization', `Bearer ${token.value}`);
+      // response.headers.set('Authorization', `Bearer ${token.value}`);
       return response;
     }
   }

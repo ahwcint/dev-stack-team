@@ -11,9 +11,11 @@ export class signInUserRequestApi {
 }
 
 export class signInUserResponseApi extends BaseResponseApi<
-  Omit<User, 'password'>
+  Omit<User, 'password'> & { session: Session }
 > {
-  constructor(params: BaseResponseApi<Omit<User, 'password'>>) {
+  constructor(
+    params: BaseResponseApi<Omit<User, 'password'> & { session: Session }>,
+  ) {
     super(params);
   }
 }

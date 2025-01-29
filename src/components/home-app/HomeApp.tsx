@@ -1,5 +1,7 @@
+'use client';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { HiOutlineColorSwatch, HiOutlineDotsHorizontal } from 'react-icons/hi';
 
 export function HomeApp() {
@@ -7,6 +9,7 @@ export function HomeApp() {
   const handleChangeRouteTo = (path: string) => {
     push(path);
   };
+
   return (
     <div className="flex size-full justify-center items-center gap-10">
       <AppIcon

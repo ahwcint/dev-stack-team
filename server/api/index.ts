@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 import { socketConfig } from '../socket-io';
 import { expressRoutesConfig } from '../routes';
 import cookieParser from 'cookie-parser';
+import customMiddleware from './middleware';
 
 const _port = 3003;
 const _app = express();
@@ -26,6 +27,11 @@ _app.use(
     credentials: true,
   }),
 );
+_app.use((req, res, next) => {
+  //TODO: middleware
+  // if (!['/user/sign-in'].includes(req.path)) customMiddleware(req, res, next);
+  next();
+});
 _app.use(express.json()); // use express middleware
 expressRoutesConfig(_app);
 

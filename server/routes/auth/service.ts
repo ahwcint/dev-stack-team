@@ -63,8 +63,8 @@ export async function verifySession({
     return {
       data: null,
       message: 'Session expired or invalid',
-      status: 200,
-      success: true,
+      status: 201,
+      success: false,
     };
   }
 }

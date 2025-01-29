@@ -1,13 +1,11 @@
-'use client';
-
+import axios from '@/app/lib/axios';
 import { callAPI } from '@/utils/callAPI';
-import axios from 'axios';
 
-export async function signOutApiService() {
+export async function verifySessionApiService(sessionToken: string) {
   const res = await callAPI(async () =>
-    axios.get(`${process.env.API_URL_PATH}/auth/sign-out`, {
-      withCredentials: true,
-    }),
+    axios.get(
+      `${process.env.API_URL_PATH}/auth/verify-session/${sessionToken}`,
+    ),
   );
 
   return res;

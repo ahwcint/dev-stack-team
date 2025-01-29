@@ -24,10 +24,33 @@ export async function createUser(
         username: payload.username,
         password: hashedPassword,
       },
+      omit: {
+        password: true,
+      },
     });
   });
 
-  return response;
+  if (!response.data)
+    return {
+      data: null,
+      message: 'Create user failure',
+      status: 203,
+      success: false,
+    };
+
+  const sessionResponse = await createSession(response.data.userId);
+  if (!sessionResponse.data)
+    return { ...sessionResponse, data: null, status: 203 };
+
+  const safeResponse = {
+    ...response,
+    data: {
+      ...omitObjectField(response.data, 'password'),
+      session: sessionResponse.data,
+    },
+  };
+
+  return safeResponse;
 }
 
 export async function getUser(username: string) {
@@ -44,20 +67,18 @@ export async function getUser(username: string) {
 
 export async function verifyUserSignIn(
   payload: signInUserRequestApi,
-): Promise<[signInUserResponseApi, Session?]> {
+): Promise<signInUserResponseApi> {
   // 1.find username
   const response = (await getUser(
     payload.username,
   )) as unknown as BaseResponseApi<User>;
   if (!response.data)
-    return [
-      {
-        data: null,
-        message: 'Username or password is incorrect',
-        status: 203,
-        success: false,
-      },
-    ];
+    return {
+      data: null,
+      message: 'Username or password is incorrect',
+      status: 203,
+      success: false,
+    };
 
   // 2.validation password match
   const isValid = await verifyPassword(
@@ -65,25 +86,26 @@ export async function verifyUserSignIn(
     response.data.password,
   );
   if (!isValid)
-    return [
-      {
-        data: null,
-        message: 'Username or password is incorrect',
-        status: 203,
-        success: false,
-      },
-    ];
+    return {
+      data: null,
+      message: 'Username or password is incorrect',
+      status: 203,
+      success: false,
+    };
 
   // 3.create session and return currentSession within
   const sessionResponse = await createSession(response.data.userId);
   if (!sessionResponse.data)
-    return [{ ...sessionResponse, data: null, status: 203 }];
+    return { ...sessionResponse, data: null, status: 203 };
 
   // 4.filter safe data
   const safeResponse = {
     ...response,
-    data: omitObjectField(response.data, 'password'),
+    data: {
+      ...omitObjectField(response.data, 'password'),
+      session: sessionResponse.data,
+    },
   };
 
-  return [safeResponse, sessionResponse.data];
+  return safeResponse;
 }

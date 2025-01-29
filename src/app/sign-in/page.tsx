@@ -28,7 +28,7 @@ export default function Login() {
     },
     {
       validateSchema: userSchema,
-      onSuccessMessage: 'Sign-In Success',
+      onSuccessMessage: 'Signed in Successfully',
       onSuccess: () => {
         router.push('./');
       },
@@ -46,6 +46,7 @@ export default function Login() {
       </span>
       <Form autoComplete="off" action={action} validationBehavior="native">
         <Input
+          key={`input-username-${data?.username}`}
           label={'Username'}
           type="text"
           name="username"

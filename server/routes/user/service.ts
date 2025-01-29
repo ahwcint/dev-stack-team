@@ -48,7 +48,7 @@ export async function verifyUserSignIn(
   // 1.find username
   const response = (await getUser(
     payload.username,
-  )) as unknown as BaseResponseApi<User & { currentSession?: Session }>;
+  )) as unknown as BaseResponseApi<User>;
   if (!response.data)
     return [
       {

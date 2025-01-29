@@ -82,18 +82,11 @@ export function UserRoute(_app: TypeExpress) {
     `${ROUTE_NAME}/sign-in`,
     async ({ body }: SignInRequest, res: Response) => {
       const [response, currentSession] = await verifyUserSignIn(body);
-
-      // Set the cookie on the frontend only if the API call succeeds
-      if (response.status < 400 && response.data) {
-        res.cookie('sessionToken', currentSession?.token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          expires: currentSession?.expiresAt,
-          sameSite: 'lax',
-          path: '/',
-        });
-      }
-
+      if (response.success)
+        return res.redirect(
+          303,
+          `/auth/verify-session/${currentSession?.token}`,
+        );
       res.status(response.status).json(response);
     },
   );

@@ -4,6 +4,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import { socketConfig } from '../socket-io';
 import { expressRoutesConfig } from '../routes';
+import cookieParser from 'cookie-parser';
 
 const _port = 3003;
 const _app = express();
@@ -17,6 +18,7 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
+_app.use(cookieParser());
 _app.use(
   cors({
     origin: process.env.ORIGIN_PATH,

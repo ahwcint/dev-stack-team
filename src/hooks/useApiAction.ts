@@ -1,6 +1,6 @@
 'use client';
 import { useToast } from '@/components/toast/useToast';
-import { useActionState } from 'react';
+import { startTransition, useActionState } from 'react';
 import { type SafeParseReturnType, z, type ZodRawShape } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 import type { BaseResponseApi } from '@/routes/main/dto/base.dto';
@@ -52,5 +52,10 @@ export function useApiAction<T, V>(
     }
     return formData;
   }
-  return { data, action, isPending };
+
+  const mutation = () =>
+    startTransition(() => {
+      action(new FormData());
+    });
+  return { data, action, isPending, mutation };
 }

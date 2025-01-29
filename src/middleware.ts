@@ -1,8 +1,8 @@
-'user server';
+'use server';
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifySessionApiService } from './services/auth.service';
+import { verifySessionApiService } from './services/auth.service.server';
 
 const protectedPath = ['/sign-in', '/sign-up'];
 

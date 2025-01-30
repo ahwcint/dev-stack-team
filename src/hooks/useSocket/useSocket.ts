@@ -1,13 +1,13 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 export function useSocket(enabled = false) {
-  const { current: socketIO } = useRef<ReturnType<typeof io>>(
-    io(process.env.API_URL_PATH),
-  );
+  const [{ current: socketIO }, setSocketIO] = useState<{
+    current: ReturnType<typeof io> | null;
+  }>({ current: null });
   useEffect(() => {
-    socketIO.on('connect', () => {
+    socketIO?.on('connect', () => {
       console.log('moew', socketIO.connected);
     });
 
@@ -17,9 +17,17 @@ export function useSocket(enabled = false) {
   }, [socketIO]);
 
   useEffect(() => {
-    if (enabled) socketIO.connect();
-    if (!enabled) socketIO.disconnect();
+    if (enabled) socketIO?.connect();
+    if (!enabled) socketIO?.disconnect();
   }, [socketIO, enabled]);
+
+  useEffect(() => {
+    const IO = io(process.env.API_URL_PATH);
+    setSocketIO((p) => {
+      p.current = IO;
+      return p;
+    });
+  }, []);
 
   return socketIO;
 }

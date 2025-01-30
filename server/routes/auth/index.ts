@@ -28,6 +28,13 @@ export function AuthRoute(_app: TypeExpress) {
           sameSite: 'none',
           path: '/',
         });
+        res.cookie('user', response.data?.user, {
+          httpOnly: true,
+          secure: true,
+          expires: response.data?.expiresAt,
+          sameSite: 'none',
+          path: '/',
+        });
       }
 
       res.status(response.status).json(response);

@@ -61,7 +61,15 @@ export async function signOutUserApiService() {
     axios.get(`${process.env.API_URL_PATH}/auth/sign-out`),
   );
 
-  if (typeof window !== undefined) sessionStorage.clear();
+  if (typeof window !== undefined && res.success) sessionStorage.clear();
+
+  return res;
+}
+
+export async function listUserApiService() {
+  const res = await callAPI<User[]>(async () =>
+    axios.get(`${process.env.API_URL_PATH}/user`),
+  );
 
   return res;
 }

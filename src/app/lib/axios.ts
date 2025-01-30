@@ -5,7 +5,7 @@ const axios = axiosInstance.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axios.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     const token = sessionStorage.getItem('sessionToken');
     if (token) {

@@ -17,7 +17,7 @@ const Toast = (() => {
   let makeToasts: (newToasts: ToastType[]) => void;
 
   const Toaster: FC = () => {
-    const toastsRenderSize = 5;
+    const toastsRenderSize = 3;
     const [toastsQueue, setToastsQueue] = useState<ToastSet>(new Set([]));
     const [renderToasts, setRenderToasts] = useState<ToastSet>(new Set([]));
 

@@ -1,8 +1,7 @@
 'use server';
 
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { verifySessionApiService } from './services/auth.service.server';
+import { NextResponse, NextRequest } from 'next/server';
+import { verifySessionClient } from './app/lib/verifySessionClient';
 
 const protectedPath = ['/sign-in', '/sign-up'];
 
@@ -10,7 +9,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('sessionToken');
   const pathName = request.nextUrl.pathname;
 
-  if (!token && !protectedPath.includes(pathName)) {
+  if (!token?.value && !protectedPath.includes(pathName)) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 
@@ -18,16 +17,15 @@ export async function middleware(request: NextRequest) {
     if (protectedPath.includes(pathName))
       return NextResponse.redirect(new URL('/', request.url));
 
-    const sessionResponse = await verifySessionApiService(token.value);
+    const sessionResponse = await verifySessionClient(token.value);
 
     if (sessionResponse.success) {
       const response = NextResponse.next();
-      if (sessionResponse.data?.user) {
-        response.cookies.set('user', JSON.stringify(sessionResponse.data.user));
-      } else {
-        console.error('Api user error');
-      }
-      // response.headers.set('Authorization', `Bearer ${token.value}`);
+      response.headers.set('Authorization', `Bearer ${token.value}`);
+      return response;
+    } else {
+      const response = NextResponse.redirect(new URL('/sign-in', request.url));
+      response.cookies.set('sessionToken', '', { expires: new Date(0) });
       return response;
     }
   }

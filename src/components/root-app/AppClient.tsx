@@ -3,6 +3,8 @@ import Toast from '@/components/toast/useToast';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { PropsWithChildren } from 'react';
 import { NavigationBar } from '../navigation-bar/NavigationBar';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -14,16 +16,29 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export function RootApp({ children }: Readonly<PropsWithChildren>) {
+const queryClient = new QueryClient();
+
+export function AppClient({ children }: Readonly<PropsWithChildren>) {
+  return (
+    <App>
+      <QueryClientProvider client={queryClient}>
+        <NavigationBar />
+        {children}
+        <Toast.Toaster />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </App>
+  );
+}
+
+function App({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" className="w-full h-full light">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
         <main className="light text-foreground bg-background h-full w-full">
-          <NavigationBar />
           {children}
-          <Toast.Toaster />
         </main>
       </body>
     </html>

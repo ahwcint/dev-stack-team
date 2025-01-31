@@ -56,7 +56,7 @@ socketConfig(_io);
 _server.listen(_port, () => {
   logger.info('[SERVER] running on port: %s', _port);
   logger.info(
-    'connect socket admin ui with this link %s',
+    '[SERVER] connect socket admin ui with this link %s',
     'https://admin.socket.io',
   );
 });

@@ -2,7 +2,6 @@
 import Toast from '@/components/toast/useToast';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { PropsWithChildren } from 'react';
-import { NavigationBar } from '../navigation-bar/NavigationBar';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -18,11 +17,12 @@ const geistMono = Geist_Mono({
 
 const queryClient = new QueryClient();
 
+const defaultTheme = 'light';
+
 export function AppClient({ children }: Readonly<PropsWithChildren>) {
   return (
     <App>
       <QueryClientProvider client={queryClient}>
-        <NavigationBar />
         {children}
         <Toast.Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
@@ -33,13 +33,11 @@ export function AppClient({ children }: Readonly<PropsWithChildren>) {
 
 function App({ children }: Readonly<PropsWithChildren>) {
   return (
-    <html lang="en" className="w-full h-full light">
+    <html lang="en" className={`w-full h-full ${defaultTheme}`}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
-        <main className="light text-foreground bg-background h-full w-full">
-          {children}
-        </main>
+        <main className={`h-full w-full`}>{children}</main>
       </body>
     </html>
   );

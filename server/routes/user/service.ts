@@ -2,11 +2,11 @@ import { hashPassword, verifyPassword } from '../../utils/auth';
 import { handlerApi } from '../../utils/handlerApi';
 import prisma from '../../utils/prisma.singleton';
 import type { Session, User } from '@prisma/client';
-import type {
+import {
   createUserRequestApi,
   createUserResponseApi,
 } from './dto/createUser.dto';
-import type {
+import {
   signInUserRequestApi,
   signInUserResponseApi,
 } from './dto/signInUser.dto';
@@ -17,11 +17,12 @@ import { omitObjectField } from '../../utils/utils';
 export async function createUser(
   payload: createUserRequestApi,
 ): Promise<createUserResponseApi> {
+  const payloadRequest = new createUserRequestApi(payload);
   const response = await handlerApi('create-user', async () => {
-    const hashedPassword = await hashPassword(payload.password);
+    const hashedPassword = await hashPassword(payloadRequest.password);
     return await prisma.user.create({
       data: {
-        username: payload.username,
+        username: payloadRequest.username,
         password: hashedPassword,
       },
       omit: {
@@ -42,13 +43,13 @@ export async function createUser(
   if (!sessionResponse.data)
     return { ...sessionResponse, data: null, status: 203 };
 
-  const safeResponse = {
+  const safeResponse = new createUserResponseApi({
     ...response,
     data: {
       ...omitObjectField(response.data, 'password'),
       session: sessionResponse.data,
     },
-  };
+  });
 
   return safeResponse;
 }
@@ -68,9 +69,10 @@ export async function getUser(username: string) {
 export async function verifyUserSignIn(
   payload: signInUserRequestApi,
 ): Promise<signInUserResponseApi> {
+  const payloadRequest = new signInUserRequestApi(payload);
   // 1.find username
   const response = (await getUser(
-    payload.username,
+    payloadRequest.username,
   )) as unknown as BaseResponseApi<User>;
   if (!response.data)
     return {
@@ -82,7 +84,7 @@ export async function verifyUserSignIn(
 
   // 2.validation password match
   const isValid = await verifyPassword(
-    payload.password,
+    payloadRequest.password,
     response.data.password,
   );
   if (!isValid)
@@ -99,13 +101,13 @@ export async function verifyUserSignIn(
     return { ...sessionResponse, data: null, status: 203 };
 
   // 4.filter safe data
-  const safeResponse = {
+  const safeResponse = new signInUserResponseApi({
     ...response,
     data: {
       ...omitObjectField(response.data, 'password'),
       session: sessionResponse.data,
     },
-  };
+  });
 
   return safeResponse;
 }

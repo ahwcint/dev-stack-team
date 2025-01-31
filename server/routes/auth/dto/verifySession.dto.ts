@@ -3,8 +3,12 @@ import { BaseResponseApi } from '../../main/dto/base.dto';
 
 export class verifySessionRequestApi {
   token: string;
-  constructor(token: string) {
+  update?: boolean;
+  userId?: string;
+  constructor(token: string, update = false, userId?: string) {
     this.token = token;
+    this.update = update;
+    this.userId = userId;
   }
 }
 type SessionResponse = Session & { user: Omit<User, 'password'> };

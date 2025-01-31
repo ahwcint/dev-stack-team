@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client';
+import type { Session, User } from '@prisma/client';
 import { BaseResponseApi } from '../../main/dto/base.dto';
 
 export class createUserRequestApi {
@@ -10,8 +10,12 @@ export class createUserRequestApi {
   }
 }
 
-export class createUserResponseApi extends BaseResponseApi<User> {
-  constructor(params: BaseResponseApi<User>) {
+export class createUserResponseApi extends BaseResponseApi<
+  Omit<User, 'password'> & { session: Session }
+> {
+  constructor(
+    params: BaseResponseApi<Omit<User, 'password'> & { session: Session }>,
+  ) {
     super(params);
   }
 }

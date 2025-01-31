@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { HeroUIProvider } from '@heroui/react';
 import './globals.css';
 import { PropsWithChildren } from 'react';
-import { RootApp } from '../components/root-app/RootApp';
+import { AppClient } from '../components/root-app/AppClient';
 
 export const metadata: Metadata = {
   title: 'DevStack',
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
-    <RootApp>
+    <AppClient>
       <HeroUIProvider className="w-full h-full">{children}</HeroUIProvider>
-    </RootApp>
+    </AppClient>
   );
 }

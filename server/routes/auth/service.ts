@@ -40,9 +40,31 @@ export async function createSession(
 
 export async function verifySession({
   token,
+  update = false,
+  userId,
 }: verifySessionRequestApi): Promise<verifySessionResponseApi> {
   try {
     await decrypt(token);
+
+    if (update && userId) {
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      const newToken = await encrypt({ expiresAt, userId });
+      const session = await prisma.session.update({
+        data: {
+          token: newToken,
+          expiresAt,
+        },
+        where: { token },
+        include: { user: true },
+      });
+      logger.info('update token success');
+      return {
+        data: session,
+        message: 'Update Session Success.',
+        status: 200,
+        success: true,
+      };
+    }
 
     const session = await prisma.session.findUnique({
       where: { token },
@@ -55,7 +77,7 @@ export async function verifySession({
 
     return {
       data: session,
-      message: 'success',
+      message: 'Success',
       status: 200,
       success: true,
     };
@@ -63,8 +85,8 @@ export async function verifySession({
     return {
       data: null,
       message: 'Session expired or invalid',
-      status: 200,
-      success: true,
+      status: 201,
+      success: false,
     };
   }
 }

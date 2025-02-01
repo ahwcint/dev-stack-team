@@ -29,7 +29,7 @@ _app.use(
     origin: process.env.ORIGIN_PATH,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 _app.use((req, res, next) => {

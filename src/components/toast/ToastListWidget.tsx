@@ -116,7 +116,7 @@ export function ToastListWidget({
 
 const ContainerLayout = (props: Parameters<typeof motion.div>[0]) => (
   <motion.div
-    className="fixed top-0 right-0 flex gap-2 flex-col m-2 pb-10"
+    className="fixed top-0 right-0 flex gap-2 flex-col m-2 pb-10 z-50"
     {...props}
   />
 );

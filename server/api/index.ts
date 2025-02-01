@@ -19,6 +19,7 @@ const _io = new Server(_server, {
     origin: [`${process.env.ORIGIN_PATH}`, 'https://admin.socket.io'],
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   },
 });
 
@@ -29,7 +30,7 @@ _app.use(
     origin: process.env.ORIGIN_PATH,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true,
-    // allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 _app.use((req, res, next) => {
@@ -41,9 +42,10 @@ _app.use((req, res, next) => {
   next();
 });
 _app.use(express.json()); // use express middleware
+_app.options('*', cors());
 expressRoutesConfig(_app);
 
-// Socket Adminp
+// Socket Admin
 instrument(_io, {
   auth: false,
   namespaceName: '/',

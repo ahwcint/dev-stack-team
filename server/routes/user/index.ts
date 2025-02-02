@@ -70,7 +70,6 @@ export function UserRoute(_app: TypeExpress) {
     `${ROUTE_NAME}/sign-in`,
     async ({ body }: SignInRequest, res: Response) => {
       const response = await verifyUserSignIn(body);
-
       res.status(response.status).json(response);
     },
   );

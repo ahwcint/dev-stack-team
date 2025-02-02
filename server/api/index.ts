@@ -9,7 +9,12 @@ import customMiddleware from './middleware';
 import { instrument } from '@socket.io/admin-ui';
 import logger from '../utils/pino';
 
-export const unProtectedPath = ['/user/sign-in', '/user/sign-up', '/user'];
+export const unProtectedPath = [
+  '/user/sign-in',
+  '/user/sign-up',
+  '/user',
+  '/auth/verify-session',
+];
 
 const _port = 3003;
 const originPath = process.env.ORIGIN_PATH || 'http://localhost:3000';
@@ -25,7 +30,7 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-_app.options('*', cors());
+// _app.options('*', cors());
 _app.use(
   cors({
     origin: originPath,
@@ -37,11 +42,10 @@ _app.use(
 _app.use(express.json()); // use express middleware
 _app.use(cookieParser());
 _app.use((req, res, next) => {
-  if (
-    !unProtectedPath.includes(req.path) &&
-    !req.path.startsWith('/auth/verify-session')
-  )
-    customMiddleware(req, res, next);
+  const reCreatePath = `/${req.path.split('/')[1]}/${req.path.split('/')[2]}`;
+  if (!unProtectedPath.includes(reCreatePath))
+    return customMiddleware(req, res, next);
+  next();
 });
 expressRoutesConfig(_app);
 
@@ -66,6 +70,7 @@ _server.listen(_port, () => {
 const serverlessHandler = async (req: Request, res: Response) => {
   return _app(req, res);
 };
+
 export default serverlessHandler;
 
 export type TypeSocketIO = typeof _io;

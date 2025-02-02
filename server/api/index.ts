@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, Request } from 'express';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
@@ -61,6 +61,10 @@ _server.listen(_port, () => {
     'https://admin.socket.io',
   );
 });
+
+export default function handler(req: Request, res: Response) {
+  return _app(req, res);
+}
 
 export type TypeSocketIO = typeof _io;
 export type TypeExpress = typeof _app;

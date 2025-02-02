@@ -25,7 +25,7 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-// _app.options('*', cors());
+_app.options('*', cors());
 _app.use(
   cors({
     origin: originPath,

@@ -12,11 +12,12 @@ import logger from '../utils/pino';
 export const unProtectedPath = ['/user/sign-in', '/user/sign-up', '/user'];
 
 const _port = 3003;
+const originPath = process.env.ORIGIN_PATH || 'http://localhost:3000';
 const _app = express();
 const _server = http.createServer(_app);
 const _io = new Server(_server, {
   cors: {
-    origin: [`${process.env.ORIGIN_PATH}`, 'https://admin.socket.io'],
+    origin: [originPath, 'https://admin.socket.io'],
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -24,10 +25,10 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-_app.options('*', cors());
+// _app.options('*', cors());
 _app.use(
   cors({
-    origin: process.env.ORIGIN_PATH,
+    origin: originPath,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -40,7 +41,7 @@ _app.use((req, res, next) => {
     !unProtectedPath.includes(req.path) &&
     !req.path.startsWith('/auth/verify-session')
   )
-    return customMiddleware(req, res, next);
+    customMiddleware(req, res, next);
 });
 expressRoutesConfig(_app);
 

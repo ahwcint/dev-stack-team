@@ -24,6 +24,8 @@ const customMiddleware: MiddlewareHandler = async (req, res, next) => {
   if (!sessionResponse.success || !sessionResponse.data) {
     return next(sessionResponse);
   }
+
+  next();
 };
 
 export default customMiddleware;

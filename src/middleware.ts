@@ -23,11 +23,12 @@ export async function middleware(request: NextRequest) {
       const response = NextResponse.next();
       response.headers.set('Authorization', `Bearer ${token.value}`);
       return response;
-    } else {
-      const response = NextResponse.redirect(new URL('/sign-in', request.url));
-      response.cookies.set('sessionToken', '', { expires: new Date(0) });
-      return response;
     }
+
+    const response = NextResponse.redirect(new URL('/sign-in', request.url));
+    response.cookies.set('sessionToken', '', { expires: new Date(0) });
+    response.headers.set('Authorization', '');
+    return response;
   }
 }
 

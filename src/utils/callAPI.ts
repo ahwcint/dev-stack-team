@@ -5,21 +5,20 @@ export async function callAPI<T>(
   apiCallFn: () => Promise<AxiosResponse>,
 ): Promise<BaseResponseApi<T>> {
   try {
-    const { data, ...rest } = await apiCallFn();
-    return data;
+    const axiosResponse = await apiCallFn();
+    return axiosResponse.data;
   } catch (e) {
-    const error: AxiosError = JSON.parse(JSON.stringify(e));
     if (e instanceof AxiosError) {
-      console.log('error :>> ', error);
-      return {
-        data: null,
-        message: 'Axios Error',
-        status: error.status || 500,
-        success: false,
-      };
+      return (
+        e.response?.data || {
+          data: null,
+          message: 'Axios Error',
+          status: e.response?.status || 500,
+          success: false,
+        }
+      );
     }
 
-    console.log('error :>> ', error);
     return {
       data: null,
       message: 'Unexpected Axios Error',

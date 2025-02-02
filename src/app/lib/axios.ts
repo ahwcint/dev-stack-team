@@ -1,16 +1,15 @@
 'use client';
 import axiosInstance from 'axios';
+import getHeaders from './getHeaders';
 
 const axios = axiosInstance.create({
   withCredentials: true,
 });
 
-axios.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = sessionStorage.getItem('sessionToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+axios.interceptors.request.use(async (config) => {
+  const BearerToken = await getHeaders('Authorization');
+  if (BearerToken) {
+    config.headers.Authorization = BearerToken;
   }
   return config;
 });

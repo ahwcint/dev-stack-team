@@ -7,7 +7,7 @@
     "dev": "next dev & nodemon server/api/index.ts",
     "dev:api": "nodemon server/api/index.ts",
     "dev:web": "next dev",
-    "build": "cd ./server && yarn build && cd .. && next build",
+    "build": "cd ./server && tsc --build && npx prisma generate && cd .. && next build",
     "build:web": "next build",
     "build:api": "cd ./server && yarn build && cd ..",
     "start": "next start",

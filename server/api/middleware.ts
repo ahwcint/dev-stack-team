@@ -6,9 +6,6 @@ const customMiddleware: MiddlewareHandler = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const userCookie = req.cookies['user'];
   const sessionToken = authHeader && authHeader.split(' ')[1];
-  console.log('req.path :>> ', req.path);
-  console.log('userCookie :>> ', userCookie);
-  console.log('req.headers :>> ', sessionToken);
   if (!sessionToken || !userCookie) {
     return next({
       message: 'Unauthorized',

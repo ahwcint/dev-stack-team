@@ -24,7 +24,7 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-_app.use(cookieParser());
+_app.options('*', cors());
 _app.use(
   cors({
     origin: process.env.ORIGIN_PATH,
@@ -33,16 +33,15 @@ _app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
+_app.use(express.json()); // use express middleware
+_app.use(cookieParser());
 _app.use((req, res, next) => {
   if (
     !unProtectedPath.includes(req.path) &&
     !req.path.startsWith('/auth/verify-session')
   )
-    customMiddleware(req, res, next);
-  next();
+    return customMiddleware(req, res, next);
 });
-_app.use(express.json()); // use express middleware
-_app.options('*', cors());
 expressRoutesConfig(_app);
 
 // Socket Admin

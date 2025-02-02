@@ -62,9 +62,8 @@ _server.listen(_port, () => {
   );
 });
 
-export default function handler(req: Request, res: Response) {
+const serverlessHandler = async (req: Request, res: Response) => {
   return _app(req, res);
-}
+};
 
-export type TypeSocketIO = typeof _io;
-export type TypeExpress = typeof _app;
+export default serverlessHandler;

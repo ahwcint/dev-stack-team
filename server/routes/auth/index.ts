@@ -52,13 +52,17 @@ export function AuthRoute(_app: TypeExpress) {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: process.env.ORIGIN_PATH,
       path: '/',
+      maxAge: 1000 * 60 * 60 * 24, // one day
     });
     res.clearCookie('user', {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: process.env.ORIGIN_PATH,
       path: '/',
+      maxAge: 1000 * 60 * 60 * 24, // one day
     });
     res.status(200).json({
       data: null,

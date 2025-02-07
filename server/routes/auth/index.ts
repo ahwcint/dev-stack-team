@@ -23,17 +23,19 @@ export function AuthRoute(_app: TypeExpress) {
       if (response.status < 400 && response.data) {
         res.cookie('sessionToken', response.data?.token, {
           httpOnly: true,
-          secure: true,
+          secure: process.env.NODE_ENV === 'production',
           expires: response.data?.expiresAt,
-          sameSite: 'none',
-          path: '/',
+          sameSite: 'lax',
+          // path: '/',
+          maxAge: 1000 * 60 * 60 * 24, // one day
         });
         res.cookie('user', response.data?.user, {
           httpOnly: true,
-          secure: true,
+          secure: process.env.NODE_ENV === 'production',
           expires: response.data?.expiresAt,
-          sameSite: 'none',
-          path: '/',
+          sameSite: 'lax',
+          // path: '/',
+          maxAge: 1000 * 60 * 60 * 24, // one day
         });
       }
 
@@ -50,19 +52,17 @@ export function AuthRoute(_app: TypeExpress) {
   _app.get(`${ROUTE_NAME}/sign-out`, async (req: Request, res: Response) => {
     res.clearCookie('sessionToken', {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain: process.env.ORIGIN_PATH,
-      path: '/',
-      maxAge: 1000 * 60 * 60 * 24, // one day
+      // domain: process.env.ORIGIN_PATH,
+      // path: '/',
     });
     res.clearCookie('user', {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain: process.env.ORIGIN_PATH,
-      path: '/',
-      maxAge: 1000 * 60 * 60 * 24, // one day
+      // domain: process.env.ORIGIN_PATH,
+      // path: '/',
     });
     res.status(200).json({
       data: null,

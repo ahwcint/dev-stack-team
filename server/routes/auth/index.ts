@@ -51,7 +51,7 @@ export function AuthRoute(_app: TypeExpress) {
     res.clearCookie('sessionToken', {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       domain: process.env.ORIGIN_PATH,
       path: '/',
       maxAge: 1000 * 60 * 60 * 24, // one day
@@ -59,7 +59,7 @@ export function AuthRoute(_app: TypeExpress) {
     res.clearCookie('user', {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       domain: process.env.ORIGIN_PATH,
       path: '/',
       maxAge: 1000 * 60 * 60 * 24, // one day

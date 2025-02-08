@@ -19,8 +19,8 @@ export function Droppable({
   });
 
   return (
-    <section ref={setNodeRef} className={className}>
+    <ul ref={setNodeRef} className={className}>
       {children}
-    </section>
+    </ul>
   );
 }

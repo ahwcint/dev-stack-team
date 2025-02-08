@@ -5,10 +5,12 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Chip,
+  cn,
   Divider,
 } from '@heroui/react';
 import { motion } from 'motion/react';
-import { ReactNode, useState } from 'react';
+import { FC, PropsWithChildren, ReactNode, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -17,8 +19,8 @@ import {
   DragOverlay,
   useSensors,
 } from '@dnd-kit/core';
-import { Draggable } from '@/hooks/useDnD/Draggable';
-import { Droppable } from '@/hooks/useDnD/Droppable';
+import { Draggable } from '@/components/todo-list/dnd/Draggable';
+import { Droppable } from '@/components/todo-list/dnd/Droppable';
 
 type OverData = Omit<DragEndEvent['over'], 'data'> & {
   data: {
@@ -54,7 +56,14 @@ export function TodoListModule() {
     {
       id: 'todo',
       content: [
-        { _id: '1234sss', topic: 'new task1', details: {} },
+        {
+          _id: '1234sss',
+          topic: 'new task1',
+          details: {
+            description:
+              'lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33lorem33',
+          },
+        },
         { _id: 'sdasds', topic: 'new task2', details: {} },
         { _id: '3asdda', topic: 'new task3', details: {} },
         { _id: '3asd123da', topic: 'new task33', details: {} },
@@ -97,8 +106,9 @@ export function TodoListModule() {
       color: 'danger',
     },
   ]);
-
-  const [activeItem, setActiveItem] = useState<string | undefined>();
+  const [activeItem, setActiveItem] = useState<
+    TodoListContainer['content'][number] | undefined
+  >(undefined);
 
   const handleDragEnd = (active: ActiveData, over: OverData) => {
     const newListCategory = JSON.parse(
@@ -118,8 +128,9 @@ export function TodoListModule() {
 
     setListCategory(newListCategory);
   };
+
   return (
-    <Container className="flex gap-3 size-full">
+    <Container className="flex size-full select-none flex-col">
       <DndContext
         sensors={sensors}
         id={'hot-load'}
@@ -132,19 +143,21 @@ export function TodoListModule() {
           setActiveItem(undefined);
         }}
         onDragStart={(e) => {
-          setActiveItem(e.active.data.current?.data?.topic);
+          if (e.active.data.current?.data)
+            setActiveItem(e.active.data.current.data);
         }}
       >
-        {listCategory.map((props, index) => (
-          <TodoListContainer
-            key={`todoListContainer-${props.id}`}
-            {...props}
-            parentIndex={index}
-          />
-        ))}
-        <DragOverlay>
-          <div className="cursor-move">{activeItem}</div>
-        </DragOverlay>
+        <OnHandArea>on hand</OnHandArea>
+        <section className="flex gap-3 w-full overflow-x-auto scrollbar-hide p-3">
+          {listCategory.map((props, index) => (
+            <TodoListContainer
+              key={`todoListContainer-${props.id}`}
+              {...props}
+              parentIndex={index}
+            />
+          ))}
+        </section>
+        <DragOverlay>{activeItem && <Item {...activeItem} />}</DragOverlay>
       </DndContext>
     </Container>
   );
@@ -152,26 +165,38 @@ export function TodoListModule() {
 
 type TodoListContainer = {
   title: ReactNode;
-  content: { _id: string; topic: string; details: Record<string, unknown> }[];
+  content: {
+    _id: string;
+    topic: string;
+    details: { description?: string };
+  }[];
   color?: ButtonVariantProps['color'];
   id: string;
 };
 const TodoListContainer = (
-  props: TodoListContainer & { parentIndex: number },
+  props: TodoListContainer & { parentIndex: number; className?: string },
 ) => {
   const { color = 'default', content = [], id = '' } = props;
   return (
     <CardMotion
-      className={`bg-${color} min-h-80 h-fit max-h-full overflow-visible flex-shrink-0 flex-grow-1 basis-80`}
+      className={cn(
+        `bg-${color} min-h-80 h-fit max-h-full overflow-visible flex-shrink-0 flex-grow-1 basis-80`,
+        props.className,
+      )}
       animate={{ opacity: 1, translateY: '0%' }}
       style={{ opacity: 0, translateY: '-10%' }}
       layout
+      shadow="none"
     >
       <Badge variant="faded" color={color} content={content.length} size="lg">
-        <CardHeader className="font-bold">{props.title}</CardHeader>
+        <CardHeader className="font-bold">
+          <Chip variant="dot" color={props.color} className="bg-[#dfdfdf50] border-white">
+            {props.title}
+          </Chip>
+        </CardHeader>
       </Badge>
       <Divider />
-      <CardBody className="overflow-y-auto overflow-x-clip flex">
+      <CardBody className="overflow-y-auto overflow-x-clip flex scrollbar-hide">
         <Droppable
           id={`draggable-${props.id}`}
           className={'h-full flex-1'}
@@ -185,12 +210,7 @@ const TodoListContainer = (
               childIndex={childIndex}
               data={r}
             >
-              <div
-                style={{ background: '#DFDFDF50' }}
-                className="rounded-md p-2"
-              >
-                {r.topic}
-              </div>
+              <Item {...r} />
             </Draggable>
           ))}
         </Droppable>
@@ -201,3 +221,41 @@ const TodoListContainer = (
 
 const Container = motion.create('div');
 const CardMotion = motion.create(Card);
+const LiMotion = motion.create('li');
+
+const Item: FC<
+  Pick<TodoListContainer['content'][number], 'topic' | 'details'> & {
+    className?: string;
+  }
+> = ({ topic, details, className }) => {
+  return (
+    <LiMotion
+      style={{ background: '#DFDFDF50', outline: '.1rem solid #DFDFDF00' }}
+      whileHover={{ outline: '.1rem solid #DFDFDF' }}
+      className={cn(
+        'rounded-md p-2 list-none max-h-20 overflow-clip',
+        className,
+      )}
+    >
+      {topic}
+      {details.description && (
+        <p className="text-[.5rem] max-w-60 line-clamp-3 max-h-10">
+          {details.description}
+        </p>
+      )}
+    </LiMotion>
+  );
+};
+
+const OnHandArea: FC<PropsWithChildren> = ({ children }) => {
+  return (
+    <Card className="h-40" shadow="sm">
+      <CardHeader>
+        <Chip className="*:font-bold  has-[span]:text-orange-500 bg-orange-100">
+          On Hand
+        </Chip>
+      </CardHeader>
+      <CardBody>{children}</CardBody>
+    </Card>
+  );
+};

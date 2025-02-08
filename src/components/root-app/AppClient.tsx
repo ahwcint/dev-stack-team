@@ -1,18 +1,14 @@
 'use client';
 import Toast from '@/components/toast/useToast';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Kanit } from 'next/font/google';
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const kanitSans = Kanit({
+  variable: '--font-kanit-sans',
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 const queryClient = new QueryClient();
@@ -34,9 +30,7 @@ export function AppClient({ children }: Readonly<PropsWithChildren>) {
 function App({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" className={`w-full h-full ${defaultTheme}`}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
-      >
+      <body className={`${kanitSans.variable} antialiased h-full w-full`}>
         <main className={`h-full w-full`}>{children}</main>
       </body>
     </html>

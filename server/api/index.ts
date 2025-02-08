@@ -14,6 +14,7 @@ export const unProtectedPath = [
   '/user/sign-up',
   '/user',
   '/auth/verify-session',
+  '/auth/sign-out',
 ];
 
 const _port = 3003;

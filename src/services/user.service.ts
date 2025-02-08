@@ -9,8 +9,8 @@ import type {
   signInUserResponseApi,
 } from '@/routes/user/dto/signInUser.dto';
 import { callAPI } from '@/utils/callAPI';
-import axios from '@/app/lib/axios';
-import { verifySessionApiService } from './auth.service';
+import axios from '@/lib/axios';
+import { setCookie, deleteCookie } from 'cookies-next';
 
 export async function createUserApiService(
   payload: createUserRequestApi,
@@ -19,17 +19,11 @@ export async function createUserApiService(
     axios.post(`${process.env.API_URL_PATH}/user`, payload),
   );
 
-  if (res.data?.session) {
-    const sessionResponse = await verifySessionApiService(
-      res.data?.session.token,
-    );
-
-    if (sessionResponse.success)
-      if (typeof window !== undefined)
-        sessionStorage.setItem('sessionToken', res.data?.session.token);
-  } else {
-    if (typeof window !== undefined) sessionStorage.clear();
-  }
+  // if (res.data?.session) {
+  //   (await cookies()).set('dev-stack.session-token', res.data.session.token, {
+  //     expires: res.data.session.expiresAt,
+  //   });
+  // }
 
   return res;
 }
@@ -42,15 +36,18 @@ export async function signInUserApiService(
   );
 
   if (res.data?.session) {
-    const sessionResponse = await verifySessionApiService(
-      res.data?.session.token,
-    );
-
-    if (sessionResponse.success)
-      if (typeof window !== undefined)
-        sessionStorage.setItem('sessionToken', res.data?.session.token);
-  } else {
-    if (typeof window !== undefined) sessionStorage.clear();
+    setCookie('dev-stack.session-token', res.data.session.token, {
+      expires: new Date(res.data.session.expiresAt),
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+    setCookie('dev-stack.user-id', res.data.userId, {
+      expires: new Date(res.data.session.expiresAt),
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    });
   }
 
   return res;
@@ -60,8 +57,6 @@ export async function signOutUserApiService() {
   const res = await callAPI(async () =>
     axios.get(`${process.env.API_URL_PATH}/auth/sign-out`),
   );
-
-  if (typeof window !== undefined && res.success) sessionStorage.clear();
 
   return res;
 }

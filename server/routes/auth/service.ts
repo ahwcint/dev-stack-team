@@ -82,6 +82,7 @@ export async function verifySession({
       success: true,
     };
   } catch (e) {
+    logger.error('e :>> ', e);
     return {
       data: null,
       message: 'Session expired or invalid',

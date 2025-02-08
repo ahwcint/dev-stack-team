@@ -1,12 +1,12 @@
 'use server';
 
 import { NextResponse, NextRequest } from 'next/server';
-import { verifySessionClient } from './app/lib/verifySessionClient';
+import { verifySessionClient } from './lib/verifySessionClient';
 
 const protectedPath = ['/sign-in', '/sign-up'];
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('sessionToken');
+  const token = request.cookies.get('dev-stack.session-token');
   const pathName = request.nextUrl.pathname;
 
   if (!token?.value && !protectedPath.includes(pathName)) {
@@ -26,7 +26,9 @@ export async function middleware(request: NextRequest) {
     }
 
     const response = NextResponse.redirect(new URL('/sign-in', request.url));
-    response.cookies.set('sessionToken', '', { expires: new Date(0) });
+    response.cookies.set('dev-stack.session-token', '', {
+      expires: new Date(0),
+    });
     response.headers.set('Authorization', '');
     return response;
   }

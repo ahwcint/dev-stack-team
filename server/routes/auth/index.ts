@@ -19,7 +19,7 @@ export function AuthRoute(_app: TypeExpress) {
     `${ROUTE_NAME}/verify-session/:session`,
     async ({ params }, res: Response) => {
       const response = await verifySession({ token: params.session });
-
+      /**
       if (response.status < 400 && response.data) {
         res.cookie('sessionToken', response.data?.token, {
           httpOnly: true,
@@ -38,6 +38,7 @@ export function AuthRoute(_app: TypeExpress) {
           maxAge: 1000 * 60 * 60 * 24, // one day
         });
       }
+      */
 
       res.status(response.status).json(response);
     },
@@ -50,20 +51,8 @@ export function AuthRoute(_app: TypeExpress) {
     res.status(response.status).json(response);
   });
   _app.get(`${ROUTE_NAME}/sign-out`, async (req: Request, res: Response) => {
-    res.clearCookie('sessionToken', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      // domain: process.env.ORIGIN_PATH,
-      // path: '/',
-    });
-    res.clearCookie('user', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      // domain: process.env.ORIGIN_PATH,
-      // path: '/',
-    });
+    res.clearCookie('dev-stack.session-token');
+    res.clearCookie('dev-stack.user-id');
     res.status(200).json({
       data: null,
       message: 'Signed out Successfully',

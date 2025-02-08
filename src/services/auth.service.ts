@@ -1,4 +1,4 @@
-import axios from '@/app/lib/axios';
+import axios from '@/lib/axios';
 import { callAPI } from '@/utils/callAPI';
 
 export async function verifySessionApiService(sessionToken: string) {

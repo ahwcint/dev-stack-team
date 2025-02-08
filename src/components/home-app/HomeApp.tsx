@@ -1,8 +1,8 @@
 'use client';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { HiOutlineColorSwatch, HiOutlineDotsHorizontal } from 'react-icons/hi';
+import { CgGoogleTasks } from 'react-icons/cg';
+import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 
 export function HomeApp() {
   const { push } = useRouter();
@@ -14,10 +14,10 @@ export function HomeApp() {
     <div className="flex size-full justify-center items-center gap-10">
       <AppIcon
         variant={'shadow'}
-        label={'TO DO LIST'}
-        onPress={() => handleChangeRouteTo('/todo-list')}
+        label={'DIST'}
+        onPress={() => handleChangeRouteTo('/todo-list/dashboard')}
       >
-        <HiOutlineColorSwatch size={'7rem'} />
+        <CgGoogleTasks size={'7rem'} />
       </AppIcon>
       <AppIcon variant={'bordered'} label={'...SOON'} isDisabled>
         <HiOutlineDotsHorizontal size={'7rem'} color="#fca311" />

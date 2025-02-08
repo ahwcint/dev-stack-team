@@ -1,9 +1,10 @@
-import { TodoListModule } from '@/components/todo-list/TodoListModule';
+'use client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function TodoListPage() {
-  return (
-    <div className="p-3 size-full overflow-x-auto scrollbar-hide">
-      <TodoListModule />
-    </div>
-  );
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('todo-list/dashboard');
+  }, [router]);
 }

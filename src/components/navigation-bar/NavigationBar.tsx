@@ -1,8 +1,8 @@
 'use client';
 import { useSignOutApi } from '@/hooks/auth/useSignOutApi';
 import { Button, Card, Divider, Tooltip, useDisclosure } from '@heroui/react';
+import { CgGoogleTasks } from 'react-icons/cg';
 import { motion } from 'motion/react';
-import { HiOutlineColorSwatch } from 'react-icons/hi';
 import { LiaSignOutAltSolid } from 'react-icons/lia';
 import Modal from '../modals/confirm-modal/ConfirmModal';
 
@@ -13,7 +13,7 @@ export function NavigationBar() {
     <FloatingContainer className={'w-16 h-full *:box-border'}>
       <CardMotion className="h-full w-full flex flex-col gap-3 p-3">
         <NavigationApp content="TO DO APP" buttonProps={{ variant: 'flat' }}>
-          <HiOutlineColorSwatch size={'100%'} />
+          <CgGoogleTasks size={'100%'} />
         </NavigationApp>
         <Divider />
         <Divider className="mt-auto" />

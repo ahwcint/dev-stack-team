@@ -190,7 +190,11 @@ const TodoListContainer = (
     >
       <Badge variant="faded" color={color} content={content.length} size="lg">
         <CardHeader className="font-bold">
-          <Chip variant="dot" color={props.color} className="bg-[#dfdfdf50] border-white">
+          <Chip
+            variant="dot"
+            color={props.color}
+            className="bg-[#dfdfdf50] border-white"
+          >
             {props.title}
           </Chip>
         </CardHeader>

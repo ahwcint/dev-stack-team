@@ -31,13 +31,7 @@ export async function createUser(
     });
   });
 
-  if (!response.data)
-    return {
-      data: null,
-      message: 'Create user failure',
-      status: 203,
-      success: false,
-    };
+  if (!response.data) return { ...response, data: null };
 
   const sessionResponse = await createSession(response.data.userId);
   if (!sessionResponse.data)

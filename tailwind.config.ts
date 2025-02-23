@@ -27,7 +27,14 @@ export default {
       themes: {
         light: {
           layout: {},
-          colors: {},
+          colors: {
+            primary: '#606C38',
+            secondary: '#DDA15E',
+            content1: '#FFFFFF',
+            content2: '#283618',
+            content3: '#BC6C25',
+            background: '#FEFAE0',
+          },
           // colors: {
           //   default: {
           //     50: '#F4F7FA',

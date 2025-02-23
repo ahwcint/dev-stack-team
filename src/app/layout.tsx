@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import { HeroUIProvider } from '@heroui/react';
 import './globals.css';
 import { PropsWithChildren } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { AppClient } from '../components/root-app/AppClient';
+import { ErrorPageFallback } from '@/components/error-pages/ErrorPageFallback';
 
 export const metadata: Metadata = {
   title: 'DevStack',
@@ -11,8 +13,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
-    <AppClient>
-      <HeroUIProvider className="w-full h-full">{children}</HeroUIProvider>
-    </AppClient>
+    <ErrorBoundary fallbackRender={ErrorPageFallback}>
+      <AppClient>
+        <HeroUIProvider className="w-full h-full">{children}</HeroUIProvider>
+      </AppClient>
+    </ErrorBoundary>
   );
 }

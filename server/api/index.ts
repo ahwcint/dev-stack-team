@@ -31,7 +31,6 @@ const _io = new Server(_server, {
 });
 
 // Express Routes
-// _app.options('*', cors());
 _app.use(
   cors({
     origin: originPath,
@@ -43,7 +42,9 @@ _app.use(
 _app.use(express.json()); // use express middleware
 _app.use(cookieParser());
 _app.use((req, res, next) => {
-  const reCreatePath = `/${req.path.split('/')[1]}/${req.path.split('/')[2]}`;
+  const reCreatePath = `/${[req.path.split('/')[1], req.path.split('/')[2]]
+    .filter(Boolean)
+    .join('/')}`;
   if (!unProtectedPath.includes(reCreatePath))
     return customMiddleware(req, res, next);
   next();
